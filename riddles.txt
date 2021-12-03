@@ -1,0 +1,332 @@
+    riddle_text_old1 = "- the number of stars on my wing\n- the number on the head of my wind\n- the flash of the storm holds more\n- ruler in the arena revoked involuntarily\nWhat's the passcode?"
+    answer = "1003054"
+
+    riddle_text = "<150>|<120>|<300><150>|<120>|<150>|<120>|<120><120>|<075>|<080>|<100>|<050><060>|<100>|<060>|<050>|<060>|<060>|<050><050>|<040>|<040>|<050>|<045>|<130>|<050>|<075><060>|<055>|<055>|<050>|<045>|<050><025>|<055>|<065>|<080>|<065>|<090><100>|<090>\nThe numbers, what do they mean?"
+    
+
+    riddle_text = "00110000 01111000 00110001 00110000 01000101 00110000"
+    answer = "4320"
+
+    riddle_text = "-.- . .. .-. .- 1101011 1101110 1101001 110011 1101000 1110100 !&/"
+    answer = "keira knightley"
+
+----
+
+0100010 01100101 01110100 ^@^ 01110100 01101001 01101100 01100101 ⠠⠍⠽⠞⠓⠕⠇⠕⠽
+
+Viper
+
+----
+
+riddle_text = 02/OCT/3743\npinnacle quote of the hero\nmaster of the craft\nthis rhyme contains ducks\n______ ___ _____
+
+lasers are sucks
+
+----
+
+riddle_text = ```########\n#O#X# ##\n# #    #\n# ### ##\n#  #   #\n## ### #\n#      #\n########```\nO2X, no back, hash bad.\nSwensen.
+
+sssesseeeennwnnwwn
+
+----
+
+It lies awaiting in the shadows ready to strike fast with intention to kill
+
+training drone
+
+----
+
+6 AM SUN
+
+morningstar
+
+----
+
+"warning: the number one riddle's key is absolutegibberish\n
+\n
+1.\n
+```ig qcf uki xmbemeo loit, ucyakeza po jzzka lbqsc, lhx uvf ulimw miww dzm iej ZFG f```
+\n
+2.\n
+```JANORMDJWRLCNBWCVR```
+\n
+3.\n
+```TSYELRRSRMIEFFFKDAHHWODOEEJATGIKHHAJHYIHUHTTSUNENTDAHHFJASANEHHTSDXOXHKDJLDEITELEEITOTRJDJFHDF·```
+\n
+4.
+```00| 64 21 95 65 b5 d8 aa 3c cd 6b 65 a0 09 18 02 8d | d..e.....ke.....
+10| d7 67 95 eb 41 5b 12 5f f8 1a 78 ec 81 f9 8e 85 | .g..A[...x.....
+20| ee ad 13 2f b0 3f 90 e2 1b c4 84 fc 50 14 b1 f0 | ............P...
+30| 62 d9 44 5c 1b 88 ee d7 42 d4 c7 b7 cf 06 be 31 | b.D....B.......
+40| 58 05 24 8f 49 b3 cb e2 cd 53 c4 88 98 11 4d c3 | X...I....S....M.
+50| ed 50 21 e5 a6 7c 33 a0 58 91 e9 b8 22 0c d4 66 | .P......X......f
+60| 24 b9 b2 11 f4 e0 d2 7e fa 78 d9 1f c6 3e c2 1d | .........x......
+70| c1 31 22 06 9c 8c 88 2d d8 5e 0f 06 92 52 6c be | .........^...Rl.
+80| 4a 52 7d f2 4c 61 88 fa 3f c7 cf d9 7d d3 a3 3b | JR..La..........
+90| c3 0a 6c fe d1 7b 35 fc 60 86 c8 25 dc ac 66 2b | ..l.....`.....f.
+A0| 75 fd ba 0a c8 84 89 d8 b7 fe 5f d3 37 23 47 fc | u............G.
+B0| c2 53 c2 18 1c 85 c4 4a 39 e8 cd f7 af 0b 66 fc | .S.....J......f.
+C0| b4 c6 b0 20 f8 7b 01 52 c2 85 0a 28 fe 45 2f b6 | .......R.....E..
+D0| 88 c5 e8 41 f8 e6 53 3f 7c 69 26 1a 3a 64 b2 9d | ...A..S..i...d..```
+\n
+(twofish)
+\n
+5.\n
+```CzAXNyioPyKvYoaYfofOE09YcmH18EghkN3lk3dKOnj56sy+Hes4uk2P9sg9iath0bV4XyWJ0bazWUxQz3d1i3aFxwVy9JD3/W/Yli2OBo8VWaisNXNKafjUVfW+w0oMzNNvCJYHM+cRCU5kyVmFrOGN3bYX90l1QI6P5Ej96OhszGAYsPnqRmRKj4xgfc5UpO5BeuKikE1RwdA+6GR6GGIZKtMM2VyUt9P4ZA9v/9Xbm+EmcS0cF80O2yg9Ef4VIaLoG/Y96ssVPfQ3p17A5js3WC31rihAaFxEuhcmWcqNFXYP0/pWhJ1xoRlTjVWkGWuqhFe1h74=```
+\n
+(case5)
+\n
+helpful websites:\n
+https://www.dcode.fr/tools-list \n
+https://encode-decode.com/cast5-cbc-encrypt-online/ \n
+https://sanstv.ru/tools/crypt/alg-twofish (right click and translate to english as this is russian)"
+
+----
+
+It's old but they were king and queen
+
+gws ritari
+
+----
+
+Risen from the dead but alive again
+
+Mitch
+
+----
+
+Civic or Accord
+Lfitooks like a perfect 
+
+Arbiter
+
+----
+
++-----+-----+-----+
+|5    |  8  |  4 9|
+|     |5    |  3  |
+|  6 7|3    |    1|
++-----+-----+-----+
+|1 5 ?|     |     |
+|     |2 ? 8|     |
+|     |     |  1 8|
++-----+-----+-----+
+|7    |  ? 4|1 5  |
+|  3 ?|    2|     |
+|4 9  |  5  |    3|
++-----+-----+-----+
+
+8153
+
+----
+
+We were there,
+On the same side,
+Arbiter was our ally,
+Fighting agains the swarm,
+Almost 2000 years ago,
+There was no hero,
+Only a star
+
+wraith valkyrie
+
+---
+
+it soars the night
+hidden between the shadows of planets
+trying to catch its pray
+it hunts in groups of 12 but also in 6
+alone fragile and useless together strong as army
+
+khonarl khaje
+
+---
+
+Memo from the captain:
+Attention, all crew members.
+Please stop leaving Care Bears on the Operations System console, it's not funny, I can hear you laughing over the short range comms.
+Stop it.
+
+cerberos
+
+---
+
+One of lucky brothers escaped its fate
+Not like it makes the final answer
+But their principle served right
+And bigger one might be an option
+
+orkaan arbiter
+
+---
+
+Eiffel 65
+?????('Hello World')
+
+blueprint
+
+---
+
+choo choo
+here comes the pain train
+
+railgun
+
+---
+
+(6.5*2)1000+(((√1111)x20-66)-(2/3))+(4.5²-1/4)
+
+mft
+
+---
+
+I have a son who is liked by many
+And an adopted son who is not
+I am not a ship but in relation
+Can you find me where both of my sons live now?
+
+galactic carrier
+
+---
+
+add orbs row, card user
+
+broadsword crusader
+
+---
+
+You get 3 per round
+Center bring a lot
+But a master aims higher
+
+dart
+
+----
+
+A Lightning and a Corvette cost 110000 credits
+The Corvette costs 100000 more than the Lightning
+How much does the Lightning cost?
+
+5000
+
+----
+
+F/a c:\>+r
+
+mass driver
+
+----
+
+001111010000001000010001001110
+010000010000010100011001010000
+010000010000111110010101001100
+010000010000100010010011000010
+001111011110100010010001011100
+
+clans
+
+----
+
+category: unrelated to SA
+
+how are you gentlemen
+?-- ?--- ?--- ?-- ?----- ?- ?-
+you have no chance to survive
+
+aybabtu
+
+----
+
+I have no clothes but i am not naked.
+I have feet of sorts but never shoes.
+Sometimes I have eyes but I do never see.
+I can move yet I do not.
+If I am with you, I am your best friend.
+But if you ever need me, you wished you never had to rely on me.
+I was never alive, yet I keep you amongst the living.
+
+Hint:
+Dr. House
+
+Answer: wheelchair
+
+----
+
+Riddle:
+as acceptable as a teens rant
+
+Hint: aaaaaaaaaaaaaaaaaaaaaaaaa!!!!!
+(9'.')9 (9'.')-o 
+
+Answer:
+space arena clans beta test
+
+Anagram.
+With a deliberate A too many
+
+----
+
+              .
+           .-` :-
+        .-` .-` :
+     .-` .-` .: :
+  .-` .-` .-: : :
+-:  -: .-`  : : :
+: `-. `-.   : : :
+'-.  `-. '-.: : :
+   `-.  `-. : : :
+      `-.  `- : :
+         `-.  : :
+            `-:-`
+
+celestium
+
+----
+
+My entry (and small riddle, yea cannot help myself):
+
+Yesterday was today.
+Tomorrow is today.
+Today is not Groundhog Day.
+Today is friday, tommorow is saturday and yesterday was thursday.
+
+Posted this in contest as a small horror story.
+
+
+mine games
+
+----
+
+no lighsaber, but excalibur was quite badass
+
+wing commander
+
+----
+
+speak, friend and enter
+(dw mega riddle still coming, its being vetted by Alex)
+
+----
+
+- Freeport 7
+- Most "basic" VHF
+
+hammerhead
+
+----
+
+- 800 years ago, before the destruction of the Freeport 7 took place
+- sharing the same name, yet, so far appart in classes
+
+crusader
+
+----
+
+100m, floor, like a pony, she-fox, ❤️, 🥙, krieg, #FF0000
+
+sleipnier
+
+----
+
+What do you call Negative One sitting alone in an empty room?
+Moss: Overnumerousness!
