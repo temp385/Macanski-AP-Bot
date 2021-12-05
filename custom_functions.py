@@ -45,23 +45,27 @@ def wrong_flavor(random_int):
         output_msg = "AP bot is now sad :'("
     elif random_int == "11":
         output_msg = "[AP bot grabs pop-corn to watch your struggles]"
+    elif random_int == "12":
+        output_msg = "[AP bot is not amused]"
+    elif random_int == "13":
+        output_msg = ":x:"
     else:
         output_msg = "0"
     return output_msg
 
 def riddle_check(ans):
-    if str(ans.lower()) == "grand ion drive":
+    if str(ans.lower()) == "b-sec7":
         return "1"
     else:
         return "0"
 
 def riddle_read():
-    riddle_text = "Zoof I am speed"
+    riddle_text = "special orange... green... redish... spinning thing."
     return riddle_text
 
 def riddle_author():
-    # author="<@353973336654479361>" # Macanski
-    author="<@301361809766744077>" # vampirewolf
+    author="<@353973336654479361>" # Macanski
+    # author="<@301361809766744077>" # vampirewolf
     # author="<@732509287380942898>" # padfoot9445
     # author="<@252535294866358273>" # Alex (sheo)
     # author="<@610115754058055681>" # R.I.P

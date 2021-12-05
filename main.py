@@ -208,13 +208,22 @@ def show_all_transactions():
         trans_user_id = db["trans_user_id"]
         trans_ap_cost = db["trans_ap_cost"]
         trans_reward_code = db["trans_reward_code"]
+        user_IDs = db["user_IDs"]
+        username_cache = db["usernames"]
         trans_num = len(trans_timestamp)
         trans_current = 0
         while trans_current < trans_num:
             s1 = str(trans_timestamp[trans_current])
             s2 = str(trans_ap_cost[trans_current])
             s3 = str(trans_reward_code[trans_current])
-            username = get_username_from_id(trans_user_id[trans_current])
+            try:
+                # user_id = int(trans_user_id[trans_current])
+                # lookup_index = user_IDs.index(user_id)
+                # username = str(username_cache[lookup_index])
+                username = str(username_cache[user_IDs.index(int(trans_user_id[trans_current]))])
+            except:
+                username = get_username_from_id(trans_user_id[trans_current])
+            # username = get_username_from_id(trans_user_id[trans_current])
             supp_ID = get_user_supp_ID(int(trans_user_id[trans_current]))
             output += "\n" + f'{s1:<10}' + " | " + f'{s2:<2}' + " | " + f'{s3:<5}' + " | " + f'{username:<16}' + " | " + supp_ID
             trans_current += 1
@@ -400,6 +409,7 @@ def add_user(new_user_id, new_user_supp_id):
             if "user_IDs" in db.keys():
                 user_IDs = db["user_IDs"]
                 user_APs = db["user_APs"]
+                user_CTs = db["user_CTs"]
                 user_supp_ID = db["user_supp_ID"]
                 if new_user_id in user_IDs:
                     lookup_index = user_IDs.index(new_user_id)
@@ -409,6 +419,7 @@ def add_user(new_user_id, new_user_supp_id):
                 else:
                     user_IDs.append(new_user_id)
                     user_APs.append("0")
+                    user_CTs.append("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
                     user_supp_ID.append(new_user_supp_id)
                     db["user_IDs"] = user_IDs
                     db["user_APs"] = user_APs
@@ -417,6 +428,7 @@ def add_user(new_user_id, new_user_supp_id):
             else:
                 db["user_IDs"] = [new_user_id]
                 db["user_APs"] = ["0"]
+                db["user_CTs"] = ["0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"]
                 db["user_supp_ID"] = [new_user_supp_id]
                 return "Thank you... New user and support ID registered successfully, you are now eligible to be awarded AP and redeem rewards."
         else:
@@ -792,7 +804,7 @@ Command List (Admin Only):
         embed = discord.Embed()
         embed.title = "About Auction Points (AP) bot"
         embed.color = 0x253473
-        embed.add_field(name="Version", value="0.9.91", inline=True)
+        embed.add_field(name="Version", value="0.9.95", inline=True)
         embed.add_field(name="made by", value="<@353973336654479361>", inline=True)
         embed.add_field(name="hosted on", value="[replit](https://replit.com)", inline=True)
         embed.add_field(name="based on",
@@ -800,7 +812,7 @@ Command List (Admin Only):
                         inline=True)
         embed.add_field(name="Alpha tester(s)", value="<@252535294866358273>", inline=True)
         embed.add_field(name="Beta tester(s)", value="<@301361809766744077>\n<@324922454629810204>", inline=True)
-        latest_changes = "- added something ???, could be fun :)"
+        latest_changes = "- claim limiter implemented"
         embed.add_field(name="Latest change", value=latest_changes, inline=False)
         # await ctx.send(embed=embed)
         await message.channel.send(embed=embed)
@@ -813,7 +825,9 @@ Command List (Admin Only):
         change_098 = "- added changelog (this)\n- added new rewards to reward list\n- added a warning when user has more than allowed AP (currently 50 AP)\n- community managers get notified on reward claim\n- added some easter eggs, you should 'check' it out"
         change_099 = "- `$ap check` is now embeded (makes it look nicer)\n- minor easter egg bug fix"
         change_0991 = "- something ??? ;)"
+        change_0995 = "- claim limiter implemented, you can't claim the same reward within 28 days or a global timer reset has been initiated"
         embed.color = 0x253473
+        embed.add_field(name="0.9.95", value=change_0995, inline=False)
         embed.add_field(name="0.9.91", value=change_0991, inline=False)
         embed.add_field(name="0.9.9", value=change_099, inline=False)
         embed.add_field(name="0.9.8", value=change_098, inline=False)
@@ -1089,6 +1103,47 @@ Command List (Admin Only):
             output_msg = "All users claim timestamps reset."
             db["user_CTs"] = timestamps
         await message.channel.send(output_msg)
+
+    elif message.content.startswith("$ap_debug"):
+        # protected
+        user_id = int(message.author.id)
+        if is_admin(user_id):
+            lookup = message.content.split("$ap_debug ", 1)[1]
+            output = eval(lookup)
+        else:
+            output = "You are not authorized to do that."
+        await message.channel.send(output)
+
+    elif message.content.startswith("$ap_keys"):
+        # protected
+        user_id = int(message.author.id)
+        if is_admin(user_id):
+            output = ""
+            keys = db.keys()
+            for key in keys:
+                try:
+                    output += str(key) + " - Len: " + str(len(db[key])) + "\n"
+                except TypeError:
+                    output += str(key) + " - Value: " + str(db[key]) + "\n"
+        else:
+            output = "You are not authorized to do that."
+        await message.channel.send(output)
+
+    elif message.content.startswith("$ap_fix_CT"):
+        # protected
+        user_id = int(message.author.id)
+        if is_admin(user_id):
+            user_CTs = db["user_CTs"]
+            user_APs = db["user_APs"]
+            if len(user_CTs) < len(user_APs):
+                user_CTs.append("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
+                db["user_CTs"] = user_CTs
+                output = "CTs equalized with APs successfuly."
+            else:
+                output = "No action required."
+        else:
+            output = "You are not authorized to do that."
+        await message.channel.send(output)
 
     elif message.content.startswith("$ap_remove_user"):
         # protected
