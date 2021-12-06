@@ -54,13 +54,13 @@ def wrong_flavor(random_int):
     return output_msg
 
 def riddle_check(ans):
-    if str(ans.lower()) == "b-sec7":
+    if str(ans.lower()) == "crusader hammerhead" or str(ans.lower()) == "hammerhead crusader":
         return "1"
     else:
         return "0"
 
 def riddle_read():
-    riddle_text = "special orange... green... redish... spinning thing."
+    riddle_text = "A radar cheers hummed."
     return riddle_text
 
 def riddle_author():

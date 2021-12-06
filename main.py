@@ -14,6 +14,7 @@ from keep_alive import keep_alive
 client = discord.Client()
 max_ap_alowed = 50
 claim_timeout = 2419200 # 28 days
+slot_timeout = 82800 # 23 hours
 
 reward_code_list = ["GXAL", "GXEP", "GXZE", "GXIO",
                     "CR100", "CR250", "CR500",
@@ -85,6 +86,18 @@ def get_user_CT(user_id):
             output = "You are not registered, you need to be registered and have some AP to claim rewards, type `$ap register` to register."
     return output
 
+def get_user_ST(user_id):
+    output = "unknown error"
+    if "user_IDs" in db.keys():
+        user_list = db["user_IDs"]
+        user_STs = db["user_STs"]
+        try:
+            lookup_index = user_list.index(user_id)
+            output = user_STs[lookup_index]
+        except ValueError:
+            output = "You are not registered, you need to be registered and have some AP to play the slots minigame, type `$ap register` to register."
+    return output
+
 def get_user_supp_ID(user_id):
     output = "unknown error"
     if "user_IDs" in db.keys():
@@ -154,6 +167,20 @@ def set_user_CT(user_id, new_CT):
             output = "Something bad happened"
     return output
 
+def set_user_ST(user_id, new_ST):
+    output = "unknown error"
+    if "user_IDs" in db.keys():
+        user_list = db["user_IDs"]
+        user_STs = db["user_STs"]
+        try:
+            lookup_index = user_list.index(user_id)
+            user_STs[lookup_index] = str(new_ST)
+            db["user_STs"] = user_STs
+            output = "new ST = " + str(new_ST)
+        except ValueError:
+            output = "Something bad happened"
+    return output
+
 
 def get_username_from_id(user_id):
     url_string = "https://discord.com/api/v8/users/" + str(user_id)
@@ -211,6 +238,10 @@ def show_all_transactions():
         user_IDs = db["user_IDs"]
         username_cache = db["usernames"]
         trans_num = len(trans_timestamp)
+        if trans_num > 20:
+            trans_all = trans_num
+            trans_num = 20
+            output += "\n(Showing only first " + str(trans_num) + " transactions out of " + str(trans_all) + "."
         trans_current = 0
         while trans_current < trans_num:
             s1 = str(trans_timestamp[trans_current])
@@ -382,6 +413,7 @@ def add_user(new_user_id, new_user_supp_id):
             user_IDs = db["user_IDs"]
             user_APs = db["user_APs"]
             user_CTs = db["user_CTs"]
+            user_STs = db["user_STs"]
             user_supp_ID = db["user_supp_ID"]
             if new_user_id in user_IDs:
                 lookup_index = user_IDs.index(new_user_id)
@@ -393,15 +425,19 @@ def add_user(new_user_id, new_user_supp_id):
                 user_IDs.append(new_user_id)
                 user_APs.append("0")
                 user_CTs.append("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
+                user_STs.append("0")
                 user_supp_ID.append("0")
                 db["user_IDs"] = user_IDs
                 db["user_APs"] = user_APs
+                db["user_CTs"] = user_CTs
+                db["user_STs"] = user_STs
                 db["user_supp_ID"] = user_supp_ID
                 return "Thank you... New user registered, you are now eligible to be awarded AP, you should also register your support ID to be eligible to redeem rewards."
         else:
             db["user_IDs"] = [new_user_id]
             db["user_APs"] = ["0"]
             db["user_CTs"] = ["0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"]
+            db["user_STs"] = ["0"]
             db["user_supp_ID"] = ["0"]
             return "Thank you... New user registered, you are now eligible to be awarded AP, you should also register your support ID to be eligible to redeem rewards."
     elif str(new_user_supp_id).isnumeric():
@@ -410,6 +446,7 @@ def add_user(new_user_id, new_user_supp_id):
                 user_IDs = db["user_IDs"]
                 user_APs = db["user_APs"]
                 user_CTs = db["user_CTs"]
+                user_STs = db["user_STs"]
                 user_supp_ID = db["user_supp_ID"]
                 if new_user_id in user_IDs:
                     lookup_index = user_IDs.index(new_user_id)
@@ -420,15 +457,19 @@ def add_user(new_user_id, new_user_supp_id):
                     user_IDs.append(new_user_id)
                     user_APs.append("0")
                     user_CTs.append("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
+                    user_STs.append("0")
                     user_supp_ID.append(new_user_supp_id)
                     db["user_IDs"] = user_IDs
                     db["user_APs"] = user_APs
+                    db["user_CTs"] = user_CTs
+                    db["user_STs"] = user_STs
                     db["user_supp_ID"] = user_supp_ID
                     return "Thank you... New user and support ID registered successfully, you are now eligible to be awarded AP and redeem rewards."
             else:
                 db["user_IDs"] = [new_user_id]
                 db["user_APs"] = ["0"]
                 db["user_CTs"] = ["0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"]
+                db["user_STs"] = ["0"]
                 db["user_supp_ID"] = [new_user_supp_id]
                 return "Thank you... New user and support ID registered successfully, you are now eligible to be awarded AP and redeem rewards."
         else:
@@ -460,82 +501,168 @@ async def on_message(message):
         return
 
     elif message.content == "$ap slots":
-        symbol = [":x:", ":tangerine:", ":lemon:", ":watermelon:", ":cherries:", ":bell:", ":gem:"]
-        reel_1 = "2452153412343513412321624"
-        reel_2 = "2432125231413216312341324"
-        reel_3 = "4232131526314323131241242"
-        d1 = random.randint(1, 23)
-        d2 = random.randint(1, 23)
-        d3 = random.randint(1, 23)
-        output_msg = ":black_medium_square::question::question::question::black_medium_square:\n:arrow_forward::question::question::question::arrow_backward:\n:black_medium_square::question::question::question::black_medium_square:"
-        # output_msg = ":question::question::question:"
-        own_msg = await message.channel.send(output_msg)
-        await asyncio.sleep(1)
-        output_msg = ":black_medium_square:" + str(
-            symbol[int(reel_1[d1 - 1])]) + ":question::question::black_medium_square:\n:arrow_forward:" + str(
-            symbol[int(reel_1[d1])]) + ":question::question::arrow_backward:\n:black_medium_square:" + str(
-            symbol[int(reel_1[d1 + 1])]) + ":question::question::black_medium_square:"
-        # output_msg = str(symbol[d1]) + ":question::question:"
-        await own_msg.edit(content=output_msg)
-        await asyncio.sleep(1)
-        output_msg = ":black_medium_square:" + str(symbol[int(reel_1[d1 - 1])]) + str(
-            symbol[int(reel_2[d2 - 1])]) + ":question::black_medium_square:\n:arrow_forward:" + str(
-            symbol[int(reel_1[d1])]) + str(
-            symbol[int(reel_2[d2])]) + ":question::arrow_backward:\n:black_medium_square:" + str(
-            symbol[int(reel_1[d1 + 1])]) + str(symbol[int(reel_2[d2 + 1])]) + ":question::black_medium_square:"
-        # output_msg = str(symbol[d1]) + str(symbol[d2]) +":question:"
-        await own_msg.edit(content=output_msg)
-        await asyncio.sleep(1)
-        output_msg = ":black_medium_square:" + str(symbol[int(reel_1[d1 - 1])]) + str(
-            symbol[int(reel_2[d2 - 1])]) + str(
-            symbol[int(reel_3[d3 - 1])]) + ":black_medium_square:\n:arrow_forward:" + str(
-            symbol[int(reel_1[d1])]) + str(symbol[int(reel_2[d2])]) + str(
-            symbol[int(reel_3[d3])]) + ":arrow_backward:\n:black_medium_square:" + str(
-            symbol[int(reel_1[d1 + 1])]) + str(symbol[int(reel_2[d2 + 1])]) + str(
-            symbol[int(reel_3[d3 + 1])]) + ":black_medium_square:"
-        # output_msg = str(symbol[d1]) + str(symbol[d2]) + str(symbol[d3])
-        await own_msg.edit(content=output_msg)
-        if str(reel_1[d1]) == "6" and str(reel_2[d2]) == "6" and str(reel_3[d3]) == "6":
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 60X"
-            await own_msg.edit(content=output_msg)
-        elif str(reel_1[d1]) == "5" and str(reel_2[d2]) == "5" and str(reel_3[d3]) == "5":
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 40X"
-            await own_msg.edit(content=output_msg)
-        elif str(reel_1[d1]) == "4" and str(reel_2[d2]) == "4" and str(reel_3[d3]) == "4":
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 20X"
-            await own_msg.edit(content=output_msg)
-        elif str(reel_1[d1]) == "3" and str(reel_2[d2]) == "3" and str(reel_3[d3]) == "3":
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 10X"
-            await own_msg.edit(content=output_msg)
-        elif str(reel_1[d1]) == "2" and str(reel_2[d2]) == "2" and str(reel_3[d3]) == "2":
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 10X"
-            await own_msg.edit(content=output_msg)
-        elif str(reel_1[d1]) == "1" and str(reel_2[d2]) == "1" and str(reel_3[d3]) == "1":
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 10X"
-            await own_msg.edit(content=output_msg)
-        elif (str(reel_1[d1]) == "4" and str(reel_2[d2]) == "4") or (
-                str(reel_1[d1]) == "4" and str(reel_3[d3]) == "4") or (
-                str(reel_2[d2]) == "4" and str(reel_3[d3]) == "4"):
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 4X"
-            await own_msg.edit(content=output_msg)
-        elif str(reel_1[d1]) == "4" or str(reel_2[d2]) == "4" or str(reel_3[d3]) == "4":
-            await asyncio.sleep(1)
-            output_msg += "\nWINRAR!! 1X"
-            await own_msg.edit(content=output_msg)
+        embed = discord.Embed()
+        embed.title = "AP Slots minigame"
+        embed.color = 0x253473
+        instructions = "To play AP Slots minigame, type `$ap slots play`.\nYou need to have at least 1 AP to play.\nTo view the pay table, type `$ap slots paytable`.\nOnly the middle line pays out."
+        embed.add_field(name="Instructions", value=instructions, inline=False)
+        embed.add_field(name="Cost per spin", value="1 AP", inline=True)
+        embed.add_field(name="Spin timeout", value="23 hours", inline=True)
+        # await ctx.send(embed=embed)
+        await message.channel.send(embed=embed)
+
+    elif message.content == "$ap slots paytable":
+        output_msg = "Slots pay table:"
+        output_msg += "\n:gem::gem::gem: = 60x"
+        output_msg += " | :bell::bell::bell: = 40x"
+        output_msg += "\n:cherries::cherries::cherries: = 20x"
+        output_msg += " | :watermelon::watermelon::watermelon: = 10x"
+        output_msg += "\n:lemon::lemon::lemon: = 10x"
+        output_msg += " | :tangerine::tangerine::tangerine: = 10x"
+        output_msg += "\n:cherries::cherries::black_small_square: / :cherries::black_small_square::cherries: / :black_small_square::cherries::cherries: = 4x"
+        output_msg += "\n:cherries::black_small_square::black_small_square: / :black_small_square::cherries::black_small_square: / :black_small_square::black_small_square::cherries: = 1x"
+        await message.channel.send(output_msg)
+
+    elif message.content == "$ap slots play":
+        lookup_user = str(message.author.name)
+        # lookup_user_id = int(message.author.id)
+        output_msg = 'unknown error'
+        user_id = int(message.author.id)
+        current_AP = int(get_user_AP(user_id))
+        current_ST = get_user_ST(user_id)
+        if current_ST.isnumeric() == False:
+            output_msg = current_ST
+            await message.channel.send(output_msg)
+        elif int(current_AP) > 0:
+            if int(current_ST) < int(time.time()-slot_timeout):
+                slot_stats_spin_count = int(db["slot_stats_spin_count"])
+                slot_stats_spin_count += 1
+                db["slot_stats_spin_count"] = str(slot_stats_spin_count)
+                slot_stats_win_count = int(db["slot_stats_win_count"])
+                slot_stats_payout_count = int(db["slot_stats_payout_count"])
+                current_ST = str(int(time.time()))
+                set_user_ST(user_id, current_ST)
+                current_AP-=1
+                symbol = [":x:", ":tangerine:", ":lemon:", ":watermelon:", ":cherries:", ":bell:", ":gem:"]
+                reel_1 = "2452153412343513412321624"
+                reel_2 = "2432125231413216312341324"
+                reel_3 = "4232131526314323131241242"
+                d1 = random.randint(1, 23)
+                d2 = random.randint(1, 23)
+                d3 = random.randint(1, 23)
+                output_msg = ":black_medium_square::question::question::question::black_medium_square:\n:arrow_forward::question::question::question::arrow_backward:\n:black_medium_square::question::question::question::black_medium_square:"
+                # output_msg = ":question::question::question:"
+                own_msg = await message.channel.send(output_msg)
+                await asyncio.sleep(1)
+                output_msg = ":black_medium_square:" + str(
+                    symbol[int(reel_1[d1 - 1])]) + ":question::question::black_medium_square:\n:arrow_forward:" + str(
+                    symbol[int(reel_1[d1])]) + ":question::question::arrow_backward:\n:black_medium_square:" + str(
+                    symbol[int(reel_1[d1 + 1])]) + ":question::question::black_medium_square:"
+                # output_msg = str(symbol[d1]) + ":question::question:"
+                await own_msg.edit(content=output_msg)
+                await asyncio.sleep(1)
+                output_msg = ":black_medium_square:" + str(symbol[int(reel_1[d1 - 1])]) + str(
+                    symbol[int(reel_2[d2 - 1])]) + ":question::black_medium_square:\n:arrow_forward:" + str(
+                    symbol[int(reel_1[d1])]) + str(
+                    symbol[int(reel_2[d2])]) + ":question::arrow_backward:\n:black_medium_square:" + str(
+                    symbol[int(reel_1[d1 + 1])]) + str(symbol[int(reel_2[d2 + 1])]) + ":question::black_medium_square:"
+                # output_msg = str(symbol[d1]) + str(symbol[d2]) +":question:"
+                await own_msg.edit(content=output_msg)
+                await asyncio.sleep(1)
+                output_msg = ":black_medium_square:" + str(symbol[int(reel_1[d1 - 1])]) + str(
+                    symbol[int(reel_2[d2 - 1])]) + str(
+                    symbol[int(reel_3[d3 - 1])]) + ":black_medium_square:\n:arrow_forward:" + str(
+                    symbol[int(reel_1[d1])]) + str(symbol[int(reel_2[d2])]) + str(
+                    symbol[int(reel_3[d3])]) + ":arrow_backward:\n:black_medium_square:" + str(
+                    symbol[int(reel_1[d1 + 1])]) + str(symbol[int(reel_2[d2 + 1])]) + str(
+                    symbol[int(reel_3[d3 + 1])]) + ":black_medium_square:"
+                # output_msg = str(symbol[d1]) + str(symbol[d2]) + str(symbol[d3])
+                await own_msg.edit(content=output_msg)
+                if str(reel_1[d1]) == "6" and str(reel_2[d2]) == "6" and str(reel_3[d3]) == "6":
+                    current_AP += 60
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 60
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 60 AP!"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                elif str(reel_1[d1]) == "5" and str(reel_2[d2]) == "5" and str(reel_3[d3]) == "5":
+                    current_AP += 40
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 40
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 40 AP!"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                elif str(reel_1[d1]) == "4" and str(reel_2[d2]) == "4" and str(reel_3[d3]) == "4":
+                    current_AP += 20
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 20
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 20 AP!"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                elif str(reel_1[d1]) == "3" and str(reel_2[d2]) == "3" and str(reel_3[d3]) == "3":
+                    current_AP += 10
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 10
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 10 AP!"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                elif str(reel_1[d1]) == "2" and str(reel_2[d2]) == "2" and str(reel_3[d3]) == "2":
+                    current_AP += 10
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 10
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 10 AP!"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                elif str(reel_1[d1]) == "1" and str(reel_2[d2]) == "1" and str(reel_3[d3]) == "1":
+                    current_AP += 10
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 10
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 10 AP!"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                elif (str(reel_1[d1]) == "4" and str(reel_2[d2]) == "4") or (
+                        str(reel_1[d1]) == "4" and str(reel_3[d3]) == "4") or (
+                        str(reel_2[d2]) == "4" and str(reel_3[d3]) == "4"):
+                    current_AP += 4
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 4
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 4 AP!"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                elif str(reel_1[d1]) == "4" or str(reel_2[d2]) == "4" or str(reel_3[d3]) == "4":
+                    current_AP += 1
+                    slot_stats_win_count += 1
+                    slot_stats_payout_count += 1
+                    await asyncio.sleep(1)
+                    output_msg += "\nYOU WIN 1 AP! (break even)"
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    await own_msg.edit(content=output_msg)
+                else:
+                    await asyncio.sleep(1)
+                    output_msg += "\nBetter luck next time..."
+                    output_msg += "\nYou now have " + str(current_AP) + " AP."
+                    # output_msg = str(symbol[d1]) + str(symbol[d2]) + str(symbol[d3]) + "\nBetter luck next time..."
+                    await own_msg.edit(content=output_msg)
+                set_user_AP(user_id, current_AP)
+                db["slot_stats_win_count"] = str(slot_stats_win_count)
+                db["slot_stats_payout_count"] = str(slot_stats_payout_count)
+                # output_msg = ":lemon::cherries::watermelon::gem::popcorn:"
+                # await message.channel.send(output_msg, delete_after=5)
+            else:
+                spinnable = int(current_ST) - int(time.time()-slot_timeout)
+                output_msg = "Unable to play slots - next spin available in " + str(float(int(spinnable/360)/10)) + " hours."
+                await message.channel.send(output_msg)
         else:
-            await asyncio.sleep(1)
-            output_msg += "\nBetter luck next time..."
-            # output_msg = str(symbol[d1]) + str(symbol[d2]) + str(symbol[d3]) + "\nBetter luck next time..."
-            await own_msg.edit(content=output_msg)
-        # output_msg = ":lemon::cherries::watermelon::gem::popcorn:"
-        # await message.channel.send(output_msg, delete_after=5)
+            output_msg = "Insufficient AP to play slots (1 AP required)."
+            await message.channel.send(output_msg)
+
 
     elif message.content == "$ap update user list" or message.content == "$ap uul":
         # protected
@@ -790,6 +917,7 @@ Command List:
 "$ap about" - about AP bot and credits
 "$ap help" - this text you see
 "$ap riddle" - ???
+"$ap slots" - AP Slots Minigame
 
 Command List (Admin Only):
 "$ap all transactions" - view all current pending transactions
@@ -804,7 +932,7 @@ Command List (Admin Only):
         embed = discord.Embed()
         embed.title = "About Auction Points (AP) bot"
         embed.color = 0x253473
-        embed.add_field(name="Version", value="0.9.95", inline=True)
+        embed.add_field(name="Version", value="0.9.96", inline=True)
         embed.add_field(name="made by", value="<@353973336654479361>", inline=True)
         embed.add_field(name="hosted on", value="[replit](https://replit.com)", inline=True)
         embed.add_field(name="based on",
@@ -812,7 +940,7 @@ Command List (Admin Only):
                         inline=True)
         embed.add_field(name="Alpha tester(s)", value="<@252535294866358273>", inline=True)
         embed.add_field(name="Beta tester(s)", value="<@301361809766744077>\n<@324922454629810204>", inline=True)
-        latest_changes = "- claim limiter implemented"
+        latest_changes = "- AP Slots minigame"
         embed.add_field(name="Latest change", value=latest_changes, inline=False)
         # await ctx.send(embed=embed)
         await message.channel.send(embed=embed)
@@ -1104,6 +1232,43 @@ Command List (Admin Only):
             db["user_CTs"] = timestamps
         await message.channel.send(output_msg)
 
+    elif message.content == "$ap reset slot timestamps" or message.content == "$ap rst":
+        # protected
+        user_id = int(message.author.id)
+        if is_admin(user_id):
+            timestamps = []
+            user_list = db["user_IDs"]
+            user_num = len(user_list)
+            user_current = 0
+            while user_current < user_num:
+                timestamps.append("0")
+                user_current += 1
+            output_msg = "All users slot timestamps reset."
+            db["user_STs"] = timestamps
+        await message.channel.send(output_msg)
+
+    elif message.content == "$ap reset slot stats" or message.content == "$ap rss":
+        # protected
+        user_id = int(message.author.id)
+        if is_admin(user_id):
+            db["slot_stats_spin_count"] = "0"
+            db["slot_stats_win_count"] = "0"
+            db["slot_stats_payout_count"] = "0"
+            output_msg = "All users slot stats reset."
+        await message.channel.send(output_msg)
+
+    elif message.content == "$ap slot stats" or message.content == "$ap ss":
+        # protected
+        user_id = int(message.author.id)
+        if is_admin(user_id):
+            output_msg = "Slot play count: " + str(db["slot_stats_spin_count"]) + " (AP)\n"
+            output_msg += "Slot win count: " + str(db["slot_stats_win_count"]) + "\n"
+            output_msg += "Slot total payout: " + str(db["slot_stats_payout_count"]) + " AP\n"
+            output_msg += "Slot payout ratio: " + str(int((float(db["slot_stats_payout_count"])/float(db["slot_stats_spin_count"]))*100)) + "%"
+        else:
+            output_msg = "You are not authorized to do that."
+        await message.channel.send(output_msg)
+
     elif message.content.startswith("$ap_debug"):
         # protected
         user_id = int(message.author.id)
@@ -1122,7 +1287,10 @@ Command List (Admin Only):
             keys = db.keys()
             for key in keys:
                 try:
-                    output += str(key) + " - Len: " + str(len(db[key])) + "\n"
+                    if len(db[key]) > 5:
+                        output += str(key) + " - Len: " + str(len(db[key])) + "\n"
+                    else:
+                        output += str(key) + " - Value: " + str(db[key]) + "\n"
                 except TypeError:
                     output += str(key) + " - Value: " + str(db[key]) + "\n"
         else:
@@ -1139,6 +1307,22 @@ Command List (Admin Only):
                 user_CTs.append("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
                 db["user_CTs"] = user_CTs
                 output = "CTs equalized with APs successfuly."
+            else:
+                output = "No action required."
+        else:
+            output = "You are not authorized to do that."
+        await message.channel.send(output)
+
+    elif message.content.startswith("$ap_fix_ST"):
+        # protected
+        user_id = int(message.author.id)
+        if is_admin(user_id):
+            user_STs = db["user_STs"]
+            user_APs = db["user_APs"]
+            if len(user_STs) < len(user_APs):
+                user_STs.append("0")
+                db["user_STs"] = user_STs
+                output = "STs equalized with APs successfuly."
             else:
                 output = "No action required."
         else:
