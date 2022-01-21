@@ -49,34 +49,62 @@ def wrong_flavor(random_int):
         output_msg = "[AP bot is not amused]"
     elif random_int == "13":
         output_msg = ":x:"
+    elif random_int == "14":
+        output_msg = "<:epsilon:649520458932158474>"
+    elif random_int == "15":
+        output_msg = "<:def:571161665853456384><:eat:571161883361542164>"
+    elif random_int == "16":
+        output_msg = "<:blobcorn:845315181466222592>"
+    elif random_int == "17":
+        output_msg = ":crying_cat_face:"
+    elif random_int == "18":
+        output_msg = ":chart_with_downwards_trend:"
+    elif random_int == "19":
+        output_msg = ":broken_heart:"
+    elif random_int == "20":
+        output_msg = ":no_entry_sign:"
     else:
         output_msg = "0"
     return output_msg
 
 def riddle_check(ans):
-    if str(ans.lower()) == "crusader hammerhead" or str(ans.lower()) == "hammerhead crusader":
+    if str(ans.lower()) == "light sail" or str(ans.lower()) == "solar sail" or str(ans.lower()) == "E" or str(ans.lower()) == "E":
         return "1"
     else:
         return "0"
 
 def riddle_read():
-    riddle_text = "A radar cheers hummed."
+    riddle_text = """A distant race by the daylights grace
+Shadow thin, shadows kin
+Silent t'will roam, invisible alone"""
     return riddle_text
 
 def riddle_author():
-    author="<@353973336654479361>" # Macanski
+    # author="<@353973336654479361>" # Macanski
     # author="<@301361809766744077>" # vampirewolf
     # author="<@732509287380942898>" # padfoot9445
     # author="<@252535294866358273>" # Alex (sheo)
     # author="<@610115754058055681>" # R.I.P
     # author="<@518761614825095168>" # sr.mad
     # author="<@865330803117522944>" # BunchofApples
+    # author="<@541311774058741783>" # Matyo
+    # author="<@247767336306737153>" # TheAndylorian
+    # author="<@565668919604674570>" # gurren lagann
+    # author="<@452188168704229388>" # Darksnauw
+    # author="<@600709047850631207>" # Yuyuko
+    author="<@763145299669418094>" # Spidroxide
     return author
 
 def riddle_category():
-    category = "SA related"
+    # category = "SA related"
     # category = "Cross-over"
-    # category = "Other"
+    category = "Other"
+    # category = "Retro"
+    # category = "MEGA RIDDLE"
+    # category = "Discord"
+    # category = "I have no idea what this is..."
+    # category = "undefined"
+    # category = "Creepy"
     return category
 
 def riddle_status():

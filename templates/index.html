@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	 crossorigin="anonymous">
+	<title>FlaskApp</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Navbar</a>
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active text-primary" aria-current="page" href="#">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/transactions">
+                        Transactions</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-sm table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">UserID (Discord)</th>
+                            <th scope="col">AP</th>
+                            <th scope="col">Support ID</th>
+                            <th scope="col">Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_AP in user_APs %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ user_IDs[loop.index-1] }}</td>
+                            {% if user_AP | int > 50 %}
+                                {% set bg_color = "class=table-warning" %}
+                            {% endif %}
+                            <td {{ bg_color }}>{{ user_AP }}</td>
+                            {% if user_supp_IDs[loop.index-1] == "0" %}
+                                {% set bg_color_2 = "class=table-danger" %}
+                            {% endif %}
+                            <td {{ bg_color_2 }}>{{ user_supp_IDs[loop.index-1] }}</td>
+                            <td>{{ usernames[loop.index-1] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

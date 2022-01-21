@@ -330,3 +330,29 @@ sleipnier
 
 What do you call Negative One sitting alone in an empty room?
 Moss: Overnumerousness!
+
+----
+
+Roses are red
+violets are blue
+when in doubt, google for help
+idk if i messed smth up again
+
+Queen to Queen's level three, your move
+
+rfsasbgr (gry, sredr) vsl thiqtg : W4 R5 M4 LKI4
+(vegenere)
+
+00| 06 a8 0e ac 84 96 06 e5 0c e8 9f 4d 4b 38 f1 cd | ...........MK...
+(twofish, not blowfish, I messed that up)
+HARDRLKUESIVYBECWEEISEYCHXNCHTTEOPCTAHOSHEEOLESS
+(blowfish-compat)
+
+00| 3b 99 67 83 43 75 f0 79 87 b2 ef 61 cb 30 ab 77 | ..g.Cu.y...a...w
+10| d9 26 b0 dc 22 56 d5 cc fc 6a f6 e2 a4 41 78 c1 | .....V...j...Ax.
+20| e6 a6 5a 48 62 c6 5f 41 4d f7 9b a1 e7 5f a3 fd | ..ZHb.AM......
+
+helpful websites : 
+https://www.dcode.fr/tools-list
+https://encode-decode.com/cast5-cbc-encrypt-online/
+https://sanstv.ru/tools/crypt/alg-twofish (right click and translate to english as this is russian.)

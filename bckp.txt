@@ -1,0 +1,13 @@
+def home():
+    output = "Hello. I am alive!<br/><br/>"
+    keys = db.keys()
+    for key in keys:
+        try:
+            if len(db[key]) > 100:
+                output += str(key) + " - Len: " + str(len(
+                    db[key])) + "<br/>"
+            else:
+                output += str(key) + " - Value: " + str(db[key]) + "<br/>"
+        except TypeError:
+            output += str(key) + " - Value: " + str(db[key]) + "<br/>"
+    return output
