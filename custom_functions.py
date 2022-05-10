@@ -68,43 +68,61 @@ def wrong_flavor(random_int):
     return output_msg
 
 def riddle_check(ans):
-    if str(ans.lower()) == "light sail" or str(ans.lower()) == "solar sail" or str(ans.lower()) == "E" or str(ans.lower()) == "E":
-        return "1"
-    else:
-        return "0"
+    if db['riddle_mode'] == "hardcode":
+        if str(ans.lower()) == "E" or str(ans.lower()) == "E" or str(ans.lower()) == "E" or str(ans.lower()) == "E":
+            return "1"
+        else:
+            return "0"
+    elif db['riddle_mode'] == "softcode":
+        riddle_answer = db['riddle_answer']
+        if str(ans.lower()) == str(riddle_answer.lower()):
+            return "1"
+        else:
+            return "0"
 
 def riddle_read():
-    riddle_text = """A distant race by the daylights grace
-Shadow thin, shadows kin
-Silent t'will roam, invisible alone"""
+    if db['riddle_mode'] == "hardcode":
+        riddle_text = """no riddle available in this mode.""" 
+    elif db['riddle_mode'] == "softcode":
+        riddle_text = db['riddle_text']
     return riddle_text
 
 def riddle_author():
-    # author="<@353973336654479361>" # Macanski
-    # author="<@301361809766744077>" # vampirewolf
-    # author="<@732509287380942898>" # padfoot9445
-    # author="<@252535294866358273>" # Alex (sheo)
-    # author="<@610115754058055681>" # R.I.P
-    # author="<@518761614825095168>" # sr.mad
-    # author="<@865330803117522944>" # BunchofApples
-    # author="<@541311774058741783>" # Matyo
-    # author="<@247767336306737153>" # TheAndylorian
-    # author="<@565668919604674570>" # gurren lagann
-    # author="<@452188168704229388>" # Darksnauw
-    # author="<@600709047850631207>" # Yuyuko
-    author="<@763145299669418094>" # Spidroxide
+    if db['riddle_mode'] == "hardcode":
+        author="<@353973336654479361>" # Macanski
+        # author="<@301361809766744077>" # vampirewolf
+        # author="<@732509287380942898>" # padfoot9445
+        # author="<@252535294866358273>" # Alex (sheo)
+        # author="<@610115754058055681>" # R.I.P
+        # author="<@518761614825095168>" # sr.mad
+        # author="<@865330803117522944>" # BunchofApples
+        # author="<@541311774058741783>" # Matyo
+        # author="<@247767336306737153>" # TheAndylorian
+        # author="<@565668919604674570>" # gurren lagann
+        # author="<@452188168704229388>" # Darksnauw
+        # author="<@600709047850631207>" # Yuyuko
+        # author="<@763145299669418094>" # Spidroxide
+        # author="<@679312739591782401>" # player unknown
+        # author="<@557916819654967296>" # ThSurgeCell
+        # author="<@694482743664574534>" # Betto
+    elif db['riddle_mode'] == "softcode":
+        author = db['riddle_author']
     return author
 
 def riddle_category():
-    # category = "SA related"
-    # category = "Cross-over"
-    category = "Other"
-    # category = "Retro"
-    # category = "MEGA RIDDLE"
-    # category = "Discord"
-    # category = "I have no idea what this is..."
-    # category = "undefined"
-    # category = "Creepy"
+    if db['riddle_mode'] == "hardcode":
+        # category = "SA related"
+        # category = "Cross-over"
+        category = "Other"
+        # category = "Retro"
+        # category = "MEGA RIDDLE"
+        # category = "Discord"
+        # category = "I have no idea what this is..."
+        # category = "undefined"
+        # category = "Creepy"
+        # category = "Tribute"
+    elif db['riddle_mode'] == "softcode":
+        category = db['riddle_category']
     return category
 
 def riddle_status():

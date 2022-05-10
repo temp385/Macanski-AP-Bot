@@ -1,13 +1,5 @@
 {
   "files": {
-    "main.py": [
-      {
-        "id": "fe300768-8ab2-4ca9-b307-1295e25bbb09",
-        "line": 775,
-        "version": 35240,
-        "index": 35425
-      }
-    ],
     "templates/test.html": [
       {
         "id": "ad93463c-18bd-4a9c-85b6-8dc74039a93c",

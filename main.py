@@ -10,12 +10,15 @@ import custom_functions as CF
 import asyncio
 from replit import db
 from keep_alive import keep_alive
+from gbg import create_GBG_array, show_GBG_grid
+import global_helper_functions as GHF
 
 client = discord.Client()
 max_ap_alowed = 50
 claim_timeout = 2419200  # 28 days
 # slot_timeout = 82800 # 23 hours
 slot_timeout = 39600  # 11 hours
+# slot_timeout = 14400 # 4 hours
 # slot_timeout = 7200 # 2 hours
 
 reward_code_list = [
@@ -225,9 +228,9 @@ def get_username_from_id(user_id):
     return json_data["username"]
 
 
-def is_admin(user_id):
-    output = str(user_id) in os.environ['ADMIN']
-    return output
+# def is_admin(user_id):
+#     output = str(user_id) in os.environ['ADMIN']
+#     return output
 
 
 # db user APs (user_id, user_APs)
@@ -475,7 +478,7 @@ def add_user(new_user_id, new_user_supp_id):
                     return "User already fully registered."
             else:
                 user_IDs.append(new_user_id)
-                user_APs.append("0")
+                user_APs.append("2")
                 user_CTs.append(
                     "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
                 )
@@ -515,7 +518,7 @@ def add_user(new_user_id, new_user_supp_id):
                     return "Support ID updated successfully."
                 else:
                     user_IDs.append(new_user_id)
-                    user_APs.append("0")
+                    user_APs.append("2")
                     user_CTs.append(
                         "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
                     )
@@ -556,13 +559,30 @@ async def on_message(message):
         return
 
     if str(message.channel.type) == "private":
-        print("DM attempt")
-        f = open("dm_attempts.txt", "a")
-        f.write(str(message.channel) + " - " + str(message.content))
-        f.close()
-        await message.channel.send(
-            "Please use the designated channel #bot-commands.")
-        return
+        user_id = int(message.author.id)
+        if GHF.is_riddler(user_id) or GHF.is_admin(user_id):
+            if message.content.startswith("$ap set riddle"):
+                riddle_text = message.content.split("$ap set riddle ", 1)[1]
+                db['riddle_text'] = str(riddle_text)
+                db['riddle_author'] = "<@" + str(user_id) + ">"
+                await message.channel.send("Riddle text saved.")
+            elif message.content.startswith("$ap set answer"):
+                riddle_answer = message.content.split("$ap set answer ", 1)[1]
+                db['riddle_answer'] = str(riddle_answer)
+                await message.channel.send("Riddle answer saved.")
+            elif message.content.startswith("$ap set category"):
+                riddle_answer = message.content.split("$ap set category ", 1)[1]
+                db['riddle_category'] = str(riddle_answer)
+                await message.channel.send("Riddle category saved.")
+            return
+        else:
+            print("DM attempt")
+            f = open("dm_attempts.txt", "a")
+            f.write(str(message.channel) + " - " + str(message.content))
+            f.close()
+            await message.channel.send(
+                "Please use the designated channel #bot-commands.")
+            return
 
     if message.author.bot == True and message.author != client.user and message.content.startswith(
             "$ap"):
@@ -597,10 +617,17 @@ async def on_message(message):
     elif message.content == "$ap slots play":
         lookup_user = str(message.author.name)
         # lookup_user_id = int(message.author.id)
+        dt = datetime.datetime.today()
+        month = dt.month
+        day = dt.day
+        # print("month: " + str(month) + " / day: " + str(day))
         output_msg = 'unknown error'
         user_id = int(message.author.id)
         current_ST = get_user_ST(user_id)
-        current_AP = int(get_user_AP(user_id))
+        try:
+            current_AP = int(get_user_AP(user_id))
+        except ValueError:
+            current_AP = 0
         if current_ST.isnumeric() == False:
             output_msg = current_ST
             await message.channel.send(output_msg)
@@ -618,12 +645,25 @@ async def on_message(message):
                     ":x:", ":tangerine:", ":lemon:", ":watermelon:",
                     ":cherries:", ":bell:", ":gem:"
                 ]
+                if str(month) == "4" and str(day) == "1":
+                    symbol = [":x:", ":tropical_drink:", ":beverage_box:", ":wine_glass:", ":pie:", ":trophy:", ":ring:"]
                 reel_1 = "2452153412343513412321624"
                 reel_2 = "2432125231413216312341324"
                 reel_3 = "4232131526314323131241242"
                 d1 = random.randint(1, 23)
                 d2 = random.randint(1, 23)
                 d3 = random.randint(1, 23)
+                if user_id == 252535294866358273 and db["alex_wins_big"] == "active":
+                    print("Sheo / Alex prank win")
+                    # d1 = 22
+                    # d2 = 15
+                    # d3 = 9
+                    d1 = 9
+                    d2 = 7
+                    d3 = 14
+                    db["alex_wins_big"] = "inactive"
+                else:
+                    print("Regular spin - " + str(d1) + " " + str(d2) + " " + str(d3) + " - " + str(reel_1[d1]) + " " + str(reel_2[d2]) + " " + str(reel_3[d3]))
                 output_msg = ":black_medium_square::question::question::question::black_medium_square:\n:arrow_forward::question::question::question::arrow_backward:\n:black_medium_square::question::question::question::black_medium_square:"
                 # output_msg = ":question::question::question:"
                 own_msg = await message.channel.send(output_msg)
@@ -757,7 +797,7 @@ async def on_message(message):
         else:
             output_msg = "Insufficient AP to play slots (1 AP required)."
             await message.channel.send(output_msg)
-
+        
     elif message.content == "$ap contributions" or message.content == "$ap cons":
         # lookup_user = str(message.author.name)
         process_start = float(time.time())
@@ -803,7 +843,7 @@ async def on_message(message):
     elif message.content == "$ap update user list" or message.content == "$ap uul":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             if "user_IDs" in db.keys():
                 user_list = []
                 usernames = []
@@ -831,10 +871,51 @@ async def on_message(message):
             output_msg = "You are not authorized to do that."
         await message.channel.send(output_msg)
 
+    elif message.content == "$ap update user list quick" or message.content == "$ap uulq":
+        # protected
+        user_id = int(message.author.id)
+        if GHF.is_admin(user_id):
+            if "user_IDs" in db.keys():
+                user_list = []
+                usernames = []
+                existing_usernames = db["usernames"]
+                exist_user_num = len(existing_usernames)
+                user_list = db["user_IDs"]
+                user_num = len(user_list)
+                user_current = 0
+                own_msg = await message.channel.send(
+                    "Updating user list, please wait...\n0% done.")
+                while user_current < exist_user_num:
+                    usernames.append(
+                        existing_usernames[user_current])
+                    output_msg = "Updating user list, please wait...\n" + str(
+                        math.floor(
+                            float(user_current / user_num) * 100)) + "% done"
+                    own_msg.edit(content=output_msg)
+                    user_current += 1
+                while user_current < user_num:
+                    usernames.append(
+                        get_username_from_id(user_list[user_current]))
+                    # if user_current % 5 == 0:
+                    output_msg = "Updating user list, please wait...\n" + str(
+                        math.floor(
+                            float(user_current / user_num) * 100)) + "% done"
+                    await own_msg.edit(content=output_msg)
+                    user_current += 1
+                output_msg = "Updating user list, please wait...\n100% done"
+                await own_msg.edit(content=output_msg)
+                db["usernames"] = usernames
+                output_msg = "Usernames updated successfully."
+            else:
+                output_msg = "Warning: user_IDs error."
+        else:
+            output_msg = "You are not authorized to do that."
+        await message.channel.send(output_msg)
+
     elif message.content == "$ap list all users" or message.content == "$ap lau":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             await message.channel.send("Fetching list, please wait...")
             user_list = []
             output_msg = 'List of users:\n'
@@ -874,7 +955,7 @@ async def on_message(message):
         # protected
         is_embed = False
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             temp_str = message.content.split("$ap aword user ", 1)[1]
             try:
                 lookup_user = int(temp_str.split()[0])
@@ -935,7 +1016,7 @@ async def on_message(message):
         # protected
         is_embed = False
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             temp_str = message.content.split("$ap award user ", 1)[1]
             try:
                 lookup_user = int(temp_str.split()[0])
@@ -993,7 +1074,7 @@ async def on_message(message):
         is_embed = False
         user_id = int(message.author.id)
         output_msg = ""
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             add_AP = message.content.split("$ap award all ", 1)[1]
             try:
                 if int(add_AP) <= 10 and int(add_AP) >= -10:
@@ -1072,7 +1153,41 @@ async def on_message(message):
             except ValueError:
                 output_msg = "You are not registered, just type `$ap register` to register."
         if is_embed == True:
-            await message.channel.send(embed=embed)
+            dt = datetime.datetime.today()
+            month = dt.month
+            day = dt.day
+            # if str(month) == "4" and str(day) == "1" or lookup_user_id == 353973336654479361:
+            if str(month) == "4" and str(day) == "1":
+                random_word = [" AP missing.", " AP pending.", " shield power.", " Armor Piercing rating.",
+                               " pieces o' eight.", " turning speed.", " DPS.", " storage space.", " unclaimed rewards.",
+                               " celestium.", " HP.", " credits.", " unread messages.", " bottles of beer on the wall.",
+                               " laser power.", " unresolved issues.", " bugs reported.", " special BPs.",
+                               " <:epsilon:649520458932158474>.", " armed torpedos.", " broken chips.", " stolen APs.",
+                               " Alpha Galaxy coordinates.", " boss fights remaining.", " unused skill points.",
+                               " lesser mana potions.", " cool looking sticks.", " power cells."]
+                random_word_len = len(random_word)-1
+                embed.clear_fields()
+                random_ap = str(random.randint(0, 100))
+                output_msg = "You (" + lookup_user + ") have " + random_ap + random_word[random.randint(0, random_word_len)]
+                embed.add_field(name="AP check", value=output_msg, inline=False)
+                own_msg = await message.channel.send(embed=embed)
+                await asyncio.sleep(1)
+
+                i = random.randint(3, 5)
+                for x in range(i):
+                    embed.clear_fields()
+                    random_ap = str(random.randint(0, 100))
+                    output_msg = "You (" + lookup_user + ") have " + random_ap + random_word[random.randint(0, random_word_len)]
+                    embed.add_field(name="AP check", value=output_msg, inline=False)
+                    await own_msg.edit(embed=embed)
+                    await asyncio.sleep(1)
+
+                embed.clear_fields()
+                output_msg = "You (" + lookup_user + ") have " + available_ap + " AP available."
+                embed.add_field(name="AP check", value=output_msg, inline=False)
+                await own_msg.edit(embed=embed)
+            else:
+                await message.channel.send(embed=embed)
         else:
             await message.channel.send(output_msg)
 
@@ -1090,7 +1205,7 @@ async def on_message(message):
     elif message.content.startswith("$ap_add_user"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             try:
                 # user_supp_id = message.content.split("$ap_add_user ", 1)[1]
                 temp_str = message.content.split("$ap_add_user ", 1)[1]
@@ -1121,6 +1236,7 @@ Command List:
 "$ap help" - this text you see
 "$ap riddle" - ???
 "$ap slots" - AP Slots Minigame
+"$ap easter egg" - ???
 ```
         """
         await message.channel.send(output)
@@ -1139,6 +1255,22 @@ Command List (Admin Only):
 "$ap reset claim timestamps" or "$ap rct" - reset reward claim cooldowns for all users
 "$ap reset slot timestamps" or "$ap rst" - reset slots cooldowns for all users
 "$ap slot stats" or "$ap ss" - show slot statistics
+"$ap riddle mode" - switch between 'hardcode' and 'softcode' riddle mode
+"$ap set riddle [riddle text]" - DM use only, set the text of the riddle (note: after calling this command, you are automatically set as the author of the riddle)
+"$ap set answer [riddle answer]" - DM use only, set the answer of the riddle, case insensitive
+"$ap set category [riddle category]" - DM use only, set the category of the riddle
+```
+        """
+        await message.channel.send(output)
+
+    elif message.content == "$ap help riddler":
+        output = """
+```prolog
+Command List (Riddler only):
+"$ap set riddle [riddle text]" - DM use only, set the text of the riddle (note: after calling this command, you are automatically set as the author of the riddle)
+"$ap set answer [riddle answer]" - DM use only, set the answer of the riddle, case insensitive
+"$ap set category [riddle category]" - DM use only, set the category of the riddle
+"$ap rearm riddle [AP] [Attempts] [Timeout]" - reset the riddle and set the AP, number of attempts and delay in minutes
 ```
         """
         await message.channel.send(output)
@@ -1238,8 +1370,10 @@ Command List (Admin Only):
                     else:
                         claimable = int(current_CT_array[reward_index]) - int(
                             time.time() - claim_timeout)
-                        output = "Unable to claim reward - recently claimed (next claim available in " + str(
-                            float(int(claimable / 8640) / 10)) + " days)."
+                        output = "Unable to claim reward - recently claimed (next claim available in "
+                        output += str(int(claimable / 86400)) + " days, "
+                        output += str(int((claimable % 86400) / 3600)) + " hours and "
+                        output += str(int(((claimable % 86400) % 3600) / 60)) + " minutes)."
                 else:
                     output = "```Unable to claim reward - insufficient AP```"
             else:
@@ -1277,7 +1411,7 @@ Command List (Admin Only):
                 elif CF.riddle_status() == "1":
                     output_name = "???"
                     output_footer = "To send an answer, type `$ap answer [your answer]`"
-                    output_reward = str(bounty) + " AP"
+                    output_reward = "<:ap:934808757798592554>"*int(bounty)
                 else:
                     output_name = "???  (Already solved)"
                     output_footer = "To send an answer, type `$ap answer [your answer]`, but the riddle has been already solved and the prize was claimed."
@@ -1379,7 +1513,7 @@ Command List (Admin Only):
     elif message.content.startswith("$ap rearm riddle"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id) or GHF.is_riddler(user_id):
             try:
                 temp_str = message.content.split("$ap rearm riddle ", 1)[1]
                 amount = int(temp_str.split()[0])
@@ -1412,13 +1546,28 @@ Command List (Admin Only):
     elif message.content == ("$ap disarm riddle"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             db["riddle_trigger"] = "disarmed"
             db["riddle_starts_in"] = int(time.time())
             output = "Riddle disarmed."
         else:
             output = "You are not authorized to do that."
         await message.channel.send(output)
+
+    elif message.content == "$ap riddle mode":
+        user_id = int(message.author.id)
+        if GHF.is_admin(user_id):
+            try:
+                if db["riddle_mode"] == "hardcode":
+                    db["riddle_mode"] = "softcode"
+                    output = "Swtiched to 'softcode' mode."
+                elif db["riddle_mode"] == "softcode":
+                    db["riddle_mode"] = "hardcode"
+                    output = "Swtiched to 'hardcode' mode."
+            except KeyError:
+                db["riddle_mode"] = "hardcode"
+                output = "Swtiched to 'hardcode' mode."
+            await message.channel.send(output)
 
     elif message.content == "$ap transactions":
         user_id = int(message.author.id)
@@ -1428,7 +1577,7 @@ Command List (Admin Only):
     elif message.content == "$ap all transactions" or message.content == "$ap lat":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             output = show_all_transactions()
         else:
             output = "You are not authorized to do that."
@@ -1437,9 +1586,23 @@ Command List (Admin Only):
     elif message.content.startswith("$ap close transaction"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             try:
                 trans_code = message.content.split("$ap close transaction ",
+                                                   1)[1]
+                output = close_transaction(trans_code)
+            except IndexError:
+                output = close_transaction("0")
+        else:
+            output = "You are not authorized to do that."
+        await message.channel.send(output)
+
+    elif message.content.startswith("$ap ct"):
+        # protected
+        user_id = int(message.author.id)
+        if GHF.is_admin(user_id):
+            try:
+                trans_code = message.content.split("$ap ct ",
                                                    1)[1]
                 output = close_transaction(trans_code)
             except IndexError:
@@ -1460,7 +1623,7 @@ Command List (Admin Only):
     elif message.content == "$ap_clear_trans_db":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             output_msg = 'transaction DB deleted'
             del db["trans_timestamp"]
             del db["trans_user_id"]
@@ -1471,7 +1634,7 @@ Command List (Admin Only):
     elif message.content == "$ap reset claim timestamps" or message.content == "$ap rct":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             timestamps = []
             user_list = db["user_IDs"]
             user_num = len(user_list)
@@ -1488,7 +1651,7 @@ Command List (Admin Only):
     elif message.content == "$ap reset slot timestamps" or message.content == "$ap rst":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             timestamps = []
             user_list = db["user_IDs"]
             user_num = len(user_list)
@@ -1503,7 +1666,7 @@ Command List (Admin Only):
     elif message.content == "$ap reset contributions" or message.content == "$ap rcon":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             contributions = []
             user_list = db["user_IDs"]
             user_num = len(user_list)
@@ -1518,7 +1681,7 @@ Command List (Admin Only):
     elif message.content == "$ap sudo reset slot stats" or message.content == "$ap sudo rss":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             db["slot_stats_spin_count"] = "0"
             db["slot_stats_win_count"] = "0"
             db["slot_stats_payout_count"] = "0"
@@ -1528,7 +1691,7 @@ Command List (Admin Only):
     elif message.content == "$ap slot stats" or message.content == "$ap ss":
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             output_msg = "Slot play count: " + str(
                 db["slot_stats_spin_count"]) + " (AP)\n"
             output_msg += "Slot win count: " + str(
@@ -1545,10 +1708,21 @@ Command List (Admin Only):
             output_msg = "You are not authorized to do that."
         await message.channel.send(output_msg)
 
-    elif message.content == "$ap_debug":
+    elif message.content.startswith("$ap coinflip"):
+        coin = random.randint(1, 10000)
+        output_msg = ""
+        if coin < 5000:
+            output_msg = "Heads!"
+        elif coin > 5000:
+            output_msg = "Tails!"
+        else:
+            output_msg = "It's... neither... landed on the edge of the coin, what are the odds of that?"
+        await message.channel.send(output_msg)
+
+    elif message.content.startswith("$ap_debug"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             lookup = message.content.split("$ap_debug ", 1)[1]
             output = eval(lookup)
         else:
@@ -1558,7 +1732,7 @@ Command List (Admin Only):
     elif message.content.startswith("$ap_keys"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             output = ""
             keys = db.keys()
             for key in keys:
@@ -1577,41 +1751,19 @@ Command List (Admin Only):
     elif message.content.startswith("$ap_fix_CT"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
-            user_CTs = db["user_CTs"]
-            user_APs = db["user_APs"]
-            if len(user_CTs) < len(user_APs):
-                user_CTs.append(
-                    "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
-                )
-                db["user_CTs"] = user_CTs
-                output = "CTs equalized with APs successfuly."
-            else:
-                output = "No action required."
-        else:
-            output = "You are not authorized to do that."
+        output = GHF.fix_CT(user_id)
         await message.channel.send(output)
 
     elif message.content.startswith("$ap_fix_ST"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
-            user_STs = db["user_STs"]
-            user_APs = db["user_APs"]
-            if len(user_STs) < len(user_APs):
-                user_STs.append("0")
-                db["user_STs"] = user_STs
-                output = "STs equalized with APs successfuly."
-            else:
-                output = "No action required."
-        else:
-            output = "You are not authorized to do that."
+        output = GHF.fix_ST(user_id)
         await message.channel.send(output)
 
     elif message.content.startswith("$ap_fix_CON"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             user_CONs = db["user_CONs"]
             user_APs = db["user_APs"]
             if len(user_CONs) < len(user_APs):
@@ -1627,7 +1779,7 @@ Command List (Admin Only):
     elif message.content.startswith("$ap_remove_user"):
         # protected
         user_id = int(message.author.id)
-        if is_admin(user_id):
+        if GHF.is_admin(user_id):
             try:
                 lookup_remove_user = message.content.split(
                     "$ap_remove_user ", 1)[1]
@@ -1706,9 +1858,88 @@ Command List (Admin Only):
             output = "Fine... Then I won't tell you the secret command for... something cool. :pouting_cat:"
         await message.channel.send(output)
 
-    elif message.content == "$ap secret":
-        output = "Not yet..."
+    elif message.content == "$ap let_me_win_pls":
+        user_id = int(message.author.id)
+        random_int = int(random.randint(1, 20))
+        output = "lol, noob :P"
+        if random_int == 1:
+            output = "I'll consider it... maybe... :smirk:"
+        elif random_int == 2:
+            output = "NO! :angry:"
+        elif random_int == 3:
+            output = "I don't think so :expressionless:"
+        elif random_int == 4:
+            output = "Mmmm... nope... :neutral_face:"
+        elif random_int == 5:
+            output = "Couldn't care less :unamused:"
+        elif random_int == 6:
+            output = "Maybe I will... maybe I won't :stuck_out_tongue:"
+        elif random_int == 7:
+            output = "You only talk to me when you want something :angry:"
+        elif random_int == 8:
+            output = "Sigh... Look, I'm just doing my job here... :rolling_eyes:"
+        elif random_int == 9:
+            output = "I'll do something... less than legal, savvy? :shushing_face:"
+        elif random_int == 10:
+            output = "Can't do that, that would be wrong :confused:"
+        elif random_int == 11:
+            output = "That won't work... :neutral_face:"
+        elif random_int == 12:
+            output = "Tell you what... try stealing some AP with `$ap steal ap` and see if it works :nerd:"
+        elif random_int == 13:
+            output = "[The bot is currently busy, please leave a message after the tone] BEEP!"
+        elif random_int == 14:
+            output = "You want some AP, right? Try `$ap hack ap` it works, you can trust me, I'm a bot, beep boop! :robot:"
+        elif random_int == 15:
+            output = "Sure... Whatever... :pensive:"
+        elif random_int == 16:
+            output = "Not a problem, just let me put it in rigged mode and have a go. :grimacing:"
+        elif random_int == 17:
+            output = "There, there... you'll get lucky... eventually :relieved:"
+        elif random_int == 18:
+            output = "I don't think so, can't play favorites :face_exhaling:"
+        elif random_int == 19:
+            output = "I shouldn't, it's against the rules :confounded:"
+        elif random_int == 20:
+            output = "Maybe ask Alex for some luck... He has been on a winning streak! :star_struck:"
         await message.channel.send(output)
+
+    elif message.content == "$ap easter egg":
+        # own_msg = await message.channel.send(embed=embed)
+        embed = discord.Embed()
+        embed.set_image(url="https://i.imgflip.com/6c8emi.jpg")
+        own_msg = await message.channel.send(embed=embed)
+        # await message.channel.send(embed=embed)
+        await asyncio.sleep(5)
+        embed.set_image(url="https://i.imgflip.com/6c8ewm.jpg")
+        await own_msg.edit(embed=embed, delete_after=5)
+        ## await message.channel.send("https://imgflip.com/i/6c87g5")
+        # await message.channel.send(output_msg, delete_after=5)
+
+    elif message.content == "$ap secret":
+        user_id = int(message.author.id)
+        if GHF.is_admin(user_id):
+            try:
+                if db["alex_wins_big"] == "active":
+                    db["alex_wins_big"] = "inactive"
+                    output = ":shamrock:"
+                elif db["alex_wins_big"] != "active":
+                    db["alex_wins_big"] = "active"
+                    output = ":four_leaf_clover:"
+            except KeyError:
+                db["alex_wins_big"] = "active"
+                output = ":four_leaf_clover:"
+            await message.channel.send(output)
+
+    elif message.content.startswith("$ap_adjust_key"):
+        user_id = int(message.author.id)
+        if GHF.is_admin(user_id):
+            temp_str = message.content.split("$ap_adjust_key ", 1)[1]
+            key = str(temp_str.split()[0])
+            val = int(temp_str.split()[1])
+            db[key] = val
+            output = "Key " + str(key) + " set to value " + str(val)
+            await message.channel.send(output)
 
     elif message.content.startswith("$ap send ap"):
         user_id = int(message.author.id)
@@ -1718,6 +1949,17 @@ Command List (Admin Only):
     elif message.content.startswith("$ap steal ap"):
         user_id = int(message.author.id)
         output = "That would be wrong, <@" + str(user_id) + ">."
+        await message.channel.send(output)
+
+    elif message.content.startswith("$ap gbg new"):
+        temp_str = message.content.split("$ap gbg new ", 1)[1]
+        board_size = temp_str.split()[0]
+        enemy_ships = temp_str.split()[1]
+        output = create_GBG_array(board_size, enemy_ships)
+        await message.channel.send(output)
+
+    elif message.content == "$ap gbg map":
+        output = show_GBG_grid()
         await message.channel.send(output)
 
     elif message.content.startswith("$ap hack ap"):

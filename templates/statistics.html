@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	 crossorigin="anonymous">
+	<title>FlaskApp</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Navbar</a>
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/transactions">
+                        Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active text-primary" href="#">
+                        Statistics</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>General statistics:</h2>
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Total number of registered users
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ registered_users }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users without a registered support ID
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ no_support }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Total AP currently in circulation
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ active_AP }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Total AP currently in circulation without vw bot
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ active_AP-1000 }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>AP distribution statistics:</h2>
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users with 0 AP
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ user_0 }}</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{(user_0/registered_users)*100}}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users with 1 - 10 AP
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ user_1 }}</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{(user_1/registered_users)*100}}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users with 11 - 20 AP
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ user_2 }}</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{(user_2/registered_users)*100}}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users with 21 - 30 AP
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ user_3 }}</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{(user_3/registered_users)*100}}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users with 31 - 40 AP
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ user_4 }}</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{(user_4/registered_users)*100}}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users with 41 - 50 AP
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ user_5 }}</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{(user_5/registered_users)*100}}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Users with 51 or more AP
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ user_6 }}</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{(user_6/registered_users)*100}}%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>Slots minigame statistics:</h2>
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Slots play count
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ slot_play_count }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Slots win count
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ slot_win_count }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Slots win ratio
+                    </div>
+                    <div class="card-body">
+                        <h1>{{ slot_win_ratio }}% (42%)</h1>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ slot_win_ratio }}%">
+                            </div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 42%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                Total number of registered users: {{ registered_users }} </br>
+                Users without a registered support ID: {{ no_support }} </br>
+                Total AP currently in circulation: {{ active_AP }} (not counting vw bot: {{ active_AP-1000 }})</br>
+                Users with 0 AP: {{ user_0 }} </br>
+                Users with 1 - 10 AP: {{ user_1 }} </br>
+                Users with 11 - 20 AP: {{ user_2 }} </br>
+                Users with 21 - 30 AP: {{ user_3 }} </br>
+                Users with 31 - 40 AP: {{ user_4 }} </br>
+                Users with 41 - 50 AP: {{ user_5 }} </br>
+                Users with 51 or more AP: {{ user_6 }} </br>
+                <div class="progress">
+                    <div class="progress-bar-striped bg-danger" role="progressbar" style="width: {{(user_0/registered_users)*100}}%">
+                    </div>
+                    <div class="progress-bar" role="progressbar" style="width: {{(user_1/registered_users)*100}}%">
+                    </div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{(user_2/registered_users)*100}}%">
+                    </div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: {{(user_3/registered_users)*100}}%">
+                    </div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{(user_4/registered_users)*100}}%">
+                    </div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{(user_5/registered_users)*100}}%">
+                    </div>
+                    <div class="progress-bar bg-secondary" role="progressbar" style="width: {{(user_6/registered_users)*100}}%">
+                    </div>
+                </div>
+        <h2>Riddle</h2>
+        <h3>Riddle text: {{ riddle_text }}<br/>
+            Riddle answer: {{ riddle_answer }}<br/>
+            Riddle category: {{ riddle_category }}<br/>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

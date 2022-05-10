@@ -11,3 +11,24 @@ def home():
         except TypeError:
             output += str(key) + " - Value: " + str(db[key]) + "<br/>"
     return output
+
+
+
+------------------------
+
+
+
+    elif message.content == "$ap dice play":
+        lookup_user = str(message.author.name)
+        # lookup_user_id = int(message.author.id)
+        output_msg = 'unknown error'
+        user_id = int(message.author.id)
+        current_ST = get_user_ST(user_id)
+        try:
+            current_AP = int(get_user_AP(user_id))
+        except ValueError:
+            current_AP = 0
+        if current_ST.isnumeric() == False:
+            output_msg = current_ST
+            await message.channel.send(output_msg)
+        elif int(current_AP) > 0:
